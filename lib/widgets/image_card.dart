@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:web_challenge/theme/text_styles.dart';
 
-class ImageCard extends StatelessWidget {
+class ImageCard extends StatefulWidget {
   final String imageUrl;
   final String user;
   final String tags;
-  final bool isDark; 
+  final bool isDark;
 
   const ImageCard({
     super.key,
@@ -16,101 +16,137 @@ class ImageCard extends StatelessWidget {
   });
 
   @override
+  State<ImageCard> createState() => _ImageCardState();
+}
+
+class _ImageCardState extends State<ImageCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-
-    return Card(
-      elevation: 6,
-      margin: const EdgeInsets.all(8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      clipBehavior: Clip.antiAlias,
-      color: isDark ? Colors.grey[900] : Colors.grey[200],
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, child, progress) {
-              if (progress == null) return child;
-              return Container(
-                color: isDark ? Colors.grey[800] : Colors.grey[300],
-                child: const Center(child: CircularProgressIndicator()),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) => Container(
-              color: isDark ? Colors.grey[800] : Colors.grey[300],
-              child: Icon(
-                Icons.broken_image,
-                size: 40,
-                color: isDark ? Colors.grey[400] : Colors.grey[600],
-              ),
-            ),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedScale(
+        scale: _isHovered ? 1.03 : 1.0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ]
+                : [],
           ),
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    (isDark ? Colors.black : Colors.black).withValues(alpha: 0.6),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
+          child: Card(
+            elevation: 6,
+            margin: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-          ),
-
-          Positioned(
-            left: 12,
-            right: 12,
-            bottom: 12,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            clipBehavior: Clip.antiAlias,
+            color: widget.isDark ? Colors.grey[900] : Colors.grey[200],
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                Text(
-                  user,
-                  style: AppTextStyles.heading1.copyWith(
-                    fontSize: 16,
-                    color: Colors.white,
+                Image.network(
+                  widget.imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, progress) {
+                    if (progress == null) return child;
+                    return Container(
+                      color: widget.isDark ? Colors.grey[800] : Colors.grey[300],
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: widget.isDark ? Colors.grey[800] : Colors.grey[300],
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 40,
+                      color: widget.isDark ? Colors.grey[400] : Colors.grey[600],
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 6),
+                Positioned.fill(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          (widget.isDark ? Colors.black : Colors.black)
+                              .withValues(alpha: _isHovered ? 0.75 : 0.6),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
-                Wrap(
-                  spacing: 6,
-                  runSpacing: -8,
-                  children: tags
-                      .split(",")
-                      .take(3)
-                      .map(
-                        (tag) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Colors.black.withValues(alpha: 0.35)
-                                : Colors.black..withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            tag.trim(),
-                            style: AppTextStyles.caption.copyWith(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
+                Positioned(
+                  left: 12,
+                  right: 12,
+                  bottom: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.user,
+                        style: AppTextStyles.heading1.copyWith(
+                          fontSize: 16,
+                          color: Colors.white,
                         ),
-                      )
-                      .toList(),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: -8,
+                        children: widget.tags
+                            .split(",")
+                            .take(3)
+                            .map(
+                              (tag) => AnimatedContainer(
+                                duration: const Duration(milliseconds: 250),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: widget.isDark
+                                      ? Colors.black.withValues(alpha:  _isHovered ? 0.6 : 0.35,)
+                                      : Colors.black.withValues(alpha:  _isHovered ? 0.5 : 0.25,),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  tag.trim(),
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

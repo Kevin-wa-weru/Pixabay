@@ -52,46 +52,18 @@ class SideBar extends StatelessWidget {
                     separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (context, i) {
                       final isSelected = selectedIndex == i;
-
-                      return InkWell(
+                      return _HoverableSidebarItem(
+                        title: items[i]["title"] as String,
+                        icon: items[i]["icon"] as IconData,
+                        isSelected: isSelected,
+                        primaryColor: primaryColor,
+                        textColor: textColor,
                         onTap: () => onItemSelected(i),
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 12),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 14,
-                            horizontal: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? primaryColor.withValues(alpha: 0.3)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                items[i]["icon"] as IconData,
-                                color: isSelected ? primaryColor : textColor,
-                              ),
-                              const SizedBox(width: 12),
-                              Text(
-                                items[i]["title"] as String,
-                                style: AppTextStyles.body.copyWith(
-                                  color: isSelected ? primaryColor : textColor,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       );
                     },
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -119,6 +91,87 @@ class SideBar extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _HoverableSidebarItem extends StatefulWidget {
+  final String title;
+  final IconData icon;
+  final bool isSelected;
+  final Color primaryColor;
+  final Color textColor;
+  final VoidCallback onTap;
+
+  const _HoverableSidebarItem({
+    required this.title,
+    required this.icon,
+    required this.isSelected,
+    required this.primaryColor,
+    required this.textColor,
+    required this.onTap,
+  });
+
+  @override
+  State<_HoverableSidebarItem> createState() => _HoverableSidebarItemState();
+}
+
+class _HoverableSidebarItemState extends State<_HoverableSidebarItem> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = widget.isSelected
+        ? widget.primaryColor.withValues(alpha: 0.2)
+        : _isHovered
+            ? widget.primaryColor.withValues(alpha: 0.1)
+            : Colors.transparent;
+
+    final iconColor =
+        widget.isSelected ? widget.primaryColor : widget.textColor;
+
+    final textColor =
+        widget.isSelected ? widget.primaryColor : widget.textColor;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          margin: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              AnimatedScale(
+                scale: _isHovered ? 1.1 : 1.0,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                child: Icon(widget.icon, color: iconColor),
+              ),
+              const SizedBox(width: 12),
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                style: AppTextStyles.body.copyWith(
+                  color: textColor,
+                  fontWeight: widget.isSelected || _isHovered
+                      ? FontWeight.bold
+                      : FontWeight.w500,
+                  fontSize: 15,
+                ),
+                child: Text(widget.title),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

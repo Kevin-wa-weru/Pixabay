@@ -22,6 +22,15 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _selectedCategory;
   bool _obscurePassword = true;
 
+  bool _hoverSaveBtn = false;
+  final Map<String, bool> _hoverFields = {
+    "name": false,
+    "email": false,
+    "password": false,
+    "confirm": false,
+    "dropdown": false,
+  };
+
   final List<String> categories = [
     "Nature",
     "Technology",
@@ -83,6 +92,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).primaryColor,
                 width: 2,
               ),
+            ),
+          );
+        }
+
+        Widget hoverWrapper({required String key, required Widget child}) {
+          return MouseRegion(
+            onEnter: (_) => setState(() => _hoverFields[key] = true),
+            onExit: (_) => setState(() => _hoverFields[key] = false),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                boxShadow: _hoverFields[key] == true
+                    ? [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: 0.25),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ]
+                    : [],
+              ),
+              child: child,
             ),
           );
         }
@@ -167,141 +200,181 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 30),
 
-                              TextFormField(
-                                controller: _nameController,
-                                style: AppTextStyles.input.copyWith(
-                                  color: textColor,
+                              hoverWrapper(
+                                key: "name",
+                                child: TextFormField(
+                                  controller: _nameController,
+                                  style: AppTextStyles.input.copyWith(
+                                    color: textColor,
+                                  ),
+                                  decoration: inputDecoration(
+                                    "Full Name",
+                                    Icons.person,
+                                  ),
+                                  validator: (value) =>
+                                      Validators.validateName(value),
                                 ),
-                                decoration: inputDecoration(
-                                  "Full Name",
-                                  Icons.person,
-                                ),
-                                validator: (value) =>
-                                    Validators.validateName(value),
                               ),
                               const SizedBox(height: 20),
 
-                              TextFormField(
-                                controller: _emailController,
-                                style: AppTextStyles.input.copyWith(
-                                  color: textColor,
+                              hoverWrapper(
+                                key: "email",
+                                child: TextFormField(
+                                  controller: _emailController,
+                                  style: AppTextStyles.input.copyWith(
+                                    color: textColor,
+                                  ),
+                                  decoration: inputDecoration(
+                                    "Email",
+                                    Icons.email,
+                                  ),
+                                  validator: (value) =>
+                                      Validators.validateEmail(value),
                                 ),
-                                decoration: inputDecoration(
-                                  "Email",
-                                  Icons.email,
-                                ),
-                                validator: (value) =>
-                                    Validators.validateEmail(value),
                               ),
                               const SizedBox(height: 20),
 
-                              DropdownButtonFormField<String>(
-                                dropdownColor: cardColor,
-                                value: _selectedCategory,
-                                decoration: inputDecoration(
-                                  "Favorite Category",
-                                  Icons.category_outlined,
-                                ),
-                                items: categories.map((c) {
-                                  return DropdownMenuItem(
-                                    value: c,
-                                    child: Text(
-                                      c,
-                                      style: AppTextStyles.body.copyWith(
-                                        color: textColor,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) =>
-                                    setState(() => _selectedCategory = val),
-                                validator: (value) => Validators.validateCategory(value)
-                              ),
-                              const SizedBox(height: 20),
-
-                              TextFormField(
-                                controller: _passwordController,
-                                style: AppTextStyles.input.copyWith(
-                                  color: textColor,
-                                ),
-                                obscureText: _obscurePassword,
-                                decoration:
-                                    inputDecoration(
-                                      "Password",
-                                      Icons.lock,
-                                    ).copyWith(
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          _obscurePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        onPressed: () => setState(
-                                          () => _obscurePassword =
-                                              !_obscurePassword,
+                              hoverWrapper(
+                                key: "dropdown",
+                                child: DropdownButtonFormField<String>(
+                                  dropdownColor: cardColor,
+                                  value: _selectedCategory,
+                                  decoration: inputDecoration(
+                                    "Favorite Category",
+                                    Icons.category_outlined,
+                                  ),
+                                  items: categories.map((c) {
+                                    return DropdownMenuItem(
+                                      value: c,
+                                      child: Text(
+                                        c,
+                                        style: AppTextStyles.body.copyWith(
+                                          color: textColor,
                                         ),
                                       ),
-                                    ),
-                                validator: (value) => Validators.validatePassword(value)
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) =>
+                                      setState(() => _selectedCategory = val),
+                                  validator: (value) =>
+                                      Validators.validateCategory(value),
+                                ),
                               ),
                               const SizedBox(height: 20),
 
-                              TextFormField(
-                                controller: _confirmPasswordController,
-                                style: AppTextStyles.input.copyWith(
-                                  color: textColor,
+                              hoverWrapper(
+                                key: "password",
+                                child: TextFormField(
+                                  controller: _passwordController,
+                                  style: AppTextStyles.input.copyWith(
+                                    color: textColor,
+                                  ),
+                                  obscureText: _obscurePassword,
+                                  decoration:
+                                      inputDecoration(
+                                        "Password",
+                                        Icons.lock,
+                                      ).copyWith(
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            _obscurePassword
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: Theme.of(
+                                              context,
+                                            ).primaryColor,
+                                          ),
+                                          onPressed: () => setState(
+                                            () => _obscurePassword =
+                                                !_obscurePassword,
+                                          ),
+                                        ),
+                                      ),
+                                  validator: (value) =>
+                                      Validators.validatePassword(value),
                                 ),
-                                obscureText: true,
-                                decoration: inputDecoration(
-                                  "Confirm Password",
-                                  Icons.lock,
+                              ),
+                              const SizedBox(height: 20),
+
+                              hoverWrapper(
+                                key: "confirm",
+                                child: TextFormField(
+                                  controller: _confirmPasswordController,
+                                  style: AppTextStyles.input.copyWith(
+                                    color: textColor,
+                                  ),
+                                  obscureText: true,
+                                  decoration: inputDecoration(
+                                    "Confirm Password",
+                                    Icons.lock,
+                                  ),
+                                  validator: (value) =>
+                                      Validators.validateConfirmPassword(
+                                        value,
+                                        _passwordController.text,
+                                      ),
                                 ),
-                                validator: (value) => Validators.validateConfirmPassword(
-                                  value,
-                                  _passwordController.text,
-                                )
                               ),
                               const SizedBox(height: 28),
 
-                              SizedBox(
-                                width: double.infinity,
-                                height: 56,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Colors.tealAccent,
-                                        Colors.lightBlueAccent,
-                                      ],
-                                    ),
-                                  ),
-                                  child: ElevatedButton(
-                                    onPressed: isSubmitting
-                                        ? null
-                                        : () => _submitForm(context),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      shape: RoundedRectangleBorder(
+                              MouseRegion(
+                                onEnter: (_) =>
+                                    setState(() => _hoverSaveBtn = true),
+                                onExit: (_) =>
+                                    setState(() => _hoverSaveBtn = false),
+                                child: AnimatedScale(
+                                  scale: _hoverSaveBtn ? 1.03 : 1.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 56,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
+                                        gradient: LinearGradient(
+                                          colors: _hoverSaveBtn
+                                              ? [
+                                                  Colors.lightBlueAccent,
+                                                  Colors.tealAccent,
+                                                ]
+                                              : [
+                                                  Colors.tealAccent,
+                                                  Colors.lightBlueAccent,
+                                                ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: isSubmitting
+                                            ? null
+                                            : () => _submitForm(context),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                        ),
+                                        child: isSubmitting
+                                            ? SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      color: isDark
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                              )
+                                            : Text(
+                                                "Save Profile",
+                                                style: AppTextStyles.button,
+                                              ),
                                       ),
                                     ),
-                                    child: isSubmitting
-                                        ? SizedBox(
-                                            height: 30,
-                                            width: 30,
-                                            child: CircularProgressIndicator(
-                                              color: isDark
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          )
-                                        : Text(
-                                            "Save Profile",
-                                            style: AppTextStyles.button,
-                                          ),
                                   ),
                                 ),
                               ),
