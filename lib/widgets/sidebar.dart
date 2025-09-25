@@ -37,19 +37,15 @@ class SideBar extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // App title / branding
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Pixabay App",
-                    style: AppTextStyles.heading1.copyWith(
-                      color: primaryColor,
-                    ),
+                    style: AppTextStyles.heading1.copyWith(color: primaryColor),
                   ),
                 ),
                 const SizedBox(height: 30),
 
-                // Navigation items
                 Expanded(
                   child: ListView.separated(
                     itemCount: items.length,
@@ -68,7 +64,7 @@ class SideBar extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? primaryColor.withOpacity(0.15)
+                                ? primaryColor.withValues(alpha: 0.3)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -83,8 +79,9 @@ class SideBar extends StatelessWidget {
                                 items[i]["title"] as String,
                                 style: AppTextStyles.body.copyWith(
                                   color: isSelected ? primaryColor : textColor,
-                                  fontWeight:
-                                      isSelected ? FontWeight.bold : FontWeight.w500,
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
                                   fontSize: 15,
                                 ),
                               ),
@@ -95,8 +92,6 @@ class SideBar extends StatelessWidget {
                     },
                   ),
                 ),
-
-                // Theme Switch
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,

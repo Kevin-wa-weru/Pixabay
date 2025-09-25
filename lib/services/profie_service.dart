@@ -15,7 +15,7 @@ class ProfileService {
 
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
-      return data['id']; // Return the created ID
+      return data['id'];
     } else {
       throw Exception("Failed to save profile: ${response.statusCode}");
     }

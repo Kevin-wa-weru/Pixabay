@@ -33,27 +33,26 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Web Demo',
             theme: ThemeData(
-            brightness: Brightness.light,
-            scaffoldBackgroundColor: Colors.white,
-            cardColor: Colors.grey[200],
-            primaryColor: Colors.teal,
-            textTheme: const TextTheme(
-              bodyMedium: TextStyle(color: Colors.black87),
+              brightness: Brightness.light,
+              scaffoldBackgroundColor: Colors.white,
+              cardColor: Colors.grey[200],
+              primaryColor: Colors.teal,
+              textTheme: const TextTheme(
+                bodyMedium: TextStyle(color: Colors.black87),
+              ),
             ),
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Colors.black,
-            cardColor: Colors.grey[900],
-            primaryColor: Colors.tealAccent,
-            textTheme: const TextTheme(
-              bodyMedium: TextStyle(color: Colors.white70),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              scaffoldBackgroundColor: Colors.black,
+              cardColor: Colors.grey[900],
+              primaryColor: Colors.tealAccent,
+              textTheme: const TextTheme(
+                bodyMedium: TextStyle(color: Colors.white70),
+              ),
             ),
-          ),
             home: LayoutBuilder(
               builder: (context, constraints) {
                 if (constraints.maxWidth > 700) {
-                  // Web / Tablet → Sidebar
                   return Row(
                     children: [
                       SideBar(
@@ -66,7 +65,6 @@ class _MyAppState extends State<MyApp> {
                     ],
                   );
                 } else {
-                  // Mobile → Drawer
                   return Scaffold(
                     appBar: AppBar(title: const Text("Flutter Web Demo")),
                     drawer: Drawer(

@@ -17,7 +17,6 @@ class DashboardPage extends StatelessWidget {
         final isDark = themeMode == ThemeMode.dark;
 
         final backgroundColor = isDark ? Colors.black : Colors.white;
-        final textColor = isDark ? Colors.white70 : Colors.black87;
         final primaryColor = Theme.of(context).primaryColor;
 
         return BlocProvider(

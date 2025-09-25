@@ -30,24 +30,6 @@ class _ProfilePageState extends State<ProfilePage> {
     "Food",
   ];
 
-  InputDecoration _inputDecoration(String label, IconData icon) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.white70),
-      prefixIcon: Icon(icon, color: Colors.tealAccent),
-      filled: true,
-      fillColor: Colors.grey[900],
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.tealAccent, width: 2),
-      ),
-    );
-  }
-
   void _submitForm(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
 
@@ -71,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
         final textColor = isDark ? Colors.white70 : Colors.black87;
         final hintColor = isDark ? Colors.white60 : Colors.black45;
 
-        InputDecoration _inputDecoration(String label, IconData icon) {
+        InputDecoration inputDecoration(String label, IconData icon) {
           return InputDecoration(
             labelText: label,
             labelStyle: AppTextStyles.body.copyWith(color: hintColor),
@@ -166,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withValues(alpha: 0.3),
                               blurRadius: 12,
                               offset: const Offset(0, 6),
                             ),
@@ -184,13 +166,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 30),
 
-                              // Name
                               TextFormField(
                                 controller: _nameController,
                                 style: AppTextStyles.input.copyWith(
                                   color: textColor,
                                 ),
-                                decoration: _inputDecoration(
+                                decoration: inputDecoration(
                                   "Full Name",
                                   Icons.person,
                                 ),
@@ -201,19 +182,19 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 20),
 
-                              // Email
                               TextFormField(
                                 controller: _emailController,
                                 style: AppTextStyles.input.copyWith(
                                   color: textColor,
                                 ),
-                                decoration: _inputDecoration(
+                                decoration: inputDecoration(
                                   "Email",
                                   Icons.email,
                                 ),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return "Enter email";
+                                  }
                                   if (!RegExp(
                                     r"^[^@]+@[^@]+\.[^@]+",
                                   ).hasMatch(value)) {
@@ -224,11 +205,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 20),
 
-                              // Dropdown
                               DropdownButtonFormField<String>(
                                 dropdownColor: cardColor,
                                 value: _selectedCategory,
-                                decoration: _inputDecoration(
+                                decoration: inputDecoration(
                                   "Favorite Category",
                                   Icons.category_outlined,
                                 ),
@@ -250,7 +230,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 20),
 
-                              // Password
                               TextFormField(
                                 controller: _passwordController,
                                 style: AppTextStyles.input.copyWith(
@@ -258,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 obscureText: _obscurePassword,
                                 decoration:
-                                    _inputDecoration(
+                                    inputDecoration(
                                       "Password",
                                       Icons.lock,
                                     ).copyWith(
@@ -276,23 +255,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return "Enter password";
-                                  if (value.length < 6)
+                                  }
+                                  if (value.length < 6) {
                                     return "Password must be at least 6 chars";
+                                  }
                                   return null;
                                 },
                               ),
                               const SizedBox(height: 20),
 
-                              // Confirm Password
                               TextFormField(
                                 controller: _confirmPasswordController,
                                 style: AppTextStyles.input.copyWith(
                                   color: textColor,
                                 ),
                                 obscureText: true,
-                                decoration: _inputDecoration(
+                                decoration: inputDecoration(
                                   "Confirm Password",
                                   Icons.lock,
                                 ),
@@ -303,7 +283,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 28),
 
-                              // Button
                               SizedBox(
                                 width: double.infinity,
                                 height: 56,

@@ -5,7 +5,7 @@ class ImageCard extends StatelessWidget {
   final String imageUrl;
   final String user;
   final String tags;
-  final bool isDark; // new parameter
+  final bool isDark; 
 
   const ImageCard({
     super.key,
@@ -17,7 +17,6 @@ class ImageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isDark ? Colors.white : Colors.black87;
 
     return Card(
       elevation: 6,
@@ -47,8 +46,6 @@ class ImageCard extends StatelessWidget {
               ),
             ),
           ),
-
-          // Gradient overlay
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -56,7 +53,7 @@ class ImageCard extends StatelessWidget {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    (isDark ? Colors.black : Colors.black).withOpacity(0.6),
+                    (isDark ? Colors.black : Colors.black).withValues(alpha: 0.6),
                     Colors.transparent,
                   ],
                 ),
@@ -64,7 +61,6 @@ class ImageCard extends StatelessWidget {
             ),
           ),
 
-          // Text & tags
           Positioned(
             left: 12,
             right: 12,
@@ -72,7 +68,6 @@ class ImageCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // User text
                 Text(
                   user,
                   style: AppTextStyles.heading1.copyWith(
@@ -83,7 +78,6 @@ class ImageCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
 
-                // Tags
                 Wrap(
                   spacing: 6,
                   runSpacing: -8,
@@ -98,8 +92,8 @@ class ImageCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: isDark
-                                ? Colors.black.withOpacity(0.35)
-                                : Colors.black.withOpacity(0.25),
+                                ? Colors.black.withValues(alpha: 0.35)
+                                : Colors.black..withValues(alpha: 0.25),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_challenge/screens/cubits/search_image_cubit.dart';
 import 'package:web_challenge/screens/cubits/theme_cubit.dart';
 import 'package:web_challenge/widgets/image_card.dart';
-import 'package:web_challenge/theme/text_styles.dart'; // ✅ Import styles
+import 'package:web_challenge/theme/text_styles.dart';
 
 class GalleryPage extends StatefulWidget {
   const GalleryPage({super.key});
@@ -45,20 +45,19 @@ class _GalleryPageState extends State<GalleryPage> {
           body: SafeArea(
             child: Column(
               children: [
-                // 🔎 Modern Floating Search Bar
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: TextField(
                     controller: _searchController,
                     style: AppTextStyles.body.copyWith(
                       color: textColor,
-                    ), // dynamic text color
+                    ), 
                     decoration: InputDecoration(
                       hintText: "Search images (e.g., cats, cars)...",
                       hintStyle: AppTextStyles.body.copyWith(
                         color: isDark
                             ? Colors.white60
-                            : Colors.black45, // dynamic hint color
+                            : Colors.black45, 
                       ),
                       prefixIcon: Icon(
                         Icons.search,
@@ -67,7 +66,7 @@ class _GalleryPageState extends State<GalleryPage> {
                       filled: true,
                       fillColor: isDark
                           ? Colors.grey[850]
-                          : Colors.grey[200], // dynamic fill
+                          : Colors.grey[200], 
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -83,8 +82,6 @@ class _GalleryPageState extends State<GalleryPage> {
                     onChanged: (value) => _onSearchChanged(value, context),
                   ),
                 ),
-
-                // 📊 Content
                 Expanded(
                   child: BlocBuilder<SearchImagesCubit, SearchImagesState>(
                     builder: (context, state) {
@@ -111,7 +108,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         return Center(
                           child: Text(
                             "⚠️ ${state.error}",
-                            style: AppTextStyles.bodyError, // ✅ Error style
+                            style: AppTextStyles.bodyError, 
                           ),
                         );
                       }
@@ -133,13 +130,13 @@ class _GalleryPageState extends State<GalleryPage> {
                                 style: AppTextStyles.emptyStateTitle.copyWith(
                                   color: textColor,
                                 ),
-                              ), // ✅ Title
+                              ), 
                               const SizedBox(height: 8),
                               Text(
                                 "Start typing above to explore millions of free images",
                                 textAlign: TextAlign.center,
                                 style: AppTextStyles.emptyStateSubtitle
-                                    .copyWith(color: textColor), // ✅ Subtitle
+                                    .copyWith(color: textColor),
                               ),
                             ],
                           ),
@@ -196,40 +193,5 @@ class _GalleryPageState extends State<GalleryPage> {
   }
 }
 
-// 📸 Fullscreen Image Page
-class FullscreenImage extends StatelessWidget {
-  final String imageUrl;
-  final String user;
 
-  const FullscreenImage({
-    super.key,
-    required this.imageUrl,
-    required this.user,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Center(
-          child: Hero(
-            tag: imageUrl,
-            child: InteractiveViewer(
-              child: Image.network(imageUrl, fit: BoxFit.contain),
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        color: Colors.black54,
-        child: Text(
-          "📸 $user",
-          style: AppTextStyles.body, // ✅ Reused style
-        ),
-      ),
-    );
-  }
-}
