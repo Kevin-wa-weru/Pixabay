@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_challenge/screens/cubits/theme_cubit.dart';
 import 'package:web_challenge/screens/cubits/update_profile_cubit.dart';
 import 'package:web_challenge/theme/text_styles.dart';
+import 'package:web_challenge/utils/form_validators.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -176,9 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Icons.person,
                                 ),
                                 validator: (value) =>
-                                    value == null || value.isEmpty
-                                    ? "Enter full name"
-                                    : null,
+                                    Validators.validateName(value),
                               ),
                               const SizedBox(height: 20),
 
@@ -191,17 +190,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   "Email",
                                   Icons.email,
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Enter email";
-                                  }
-                                  if (!RegExp(
-                                    r"^[^@]+@[^@]+\.[^@]+",
-                                  ).hasMatch(value)) {
-                                    return "Enter valid email";
-                                  }
-                                  return null;
-                                },
+                                validator: (value) =>
+                                    Validators.validateEmail(value),
                               ),
                               const SizedBox(height: 20),
 
@@ -225,8 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }).toList(),
                                 onChanged: (val) =>
                                     setState(() => _selectedCategory = val),
-                                validator: (value) =>
-                                    value == null ? "Select a category" : null,
+                                validator: (value) => Validators.validateCategory(value)
                               ),
                               const SizedBox(height: 20),
 
@@ -254,15 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                       ),
                                     ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Enter password";
-                                  }
-                                  if (value.length < 6) {
-                                    return "Password must be at least 6 chars";
-                                  }
-                                  return null;
-                                },
+                                validator: (value) => Validators.validatePassword(value)
                               ),
                               const SizedBox(height: 20),
 
@@ -276,10 +257,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   "Confirm Password",
                                   Icons.lock,
                                 ),
-                                validator: (value) =>
-                                    value != _passwordController.text
-                                    ? "Passwords do not match"
-                                    : null,
+                                validator: (value) => Validators.validateConfirmPassword(
+                                  value,
+                                  _passwordController.text,
+                                )
                               ),
                               const SizedBox(height: 28),
 
