@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web_challenge/screens/cubits/get_trending_images_cubit.dart';
-import 'package:web_challenge/screens/cubits/search_image_cubit.dart';
-import 'package:web_challenge/screens/cubits/update_profile_cubit.dart';
+import 'package:web_challenge/cubits/get_trending_images_cubit.dart';
+import 'package:web_challenge/cubits/search_image_cubit.dart';
+import 'package:web_challenge/cubits/update_profile_cubit.dart';
 import 'package:web_challenge/services/pixabay_service.dart';
 import 'package:web_challenge/services/profie_service.dart';
 

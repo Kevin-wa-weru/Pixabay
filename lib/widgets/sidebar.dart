@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web_challenge/screens/cubits/theme_cubit.dart';
+import 'package:web_challenge/cubits/theme_cubit.dart';
 import 'package:web_challenge/theme/text_styles.dart';
 
 class SideBar extends StatelessWidget {
